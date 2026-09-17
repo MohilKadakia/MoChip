@@ -5,7 +5,7 @@
 
 `default_nettype none
 
-module tt_um_example (
+module tt_um_mohilkadakia_counter (
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
@@ -16,12 +16,26 @@ module tt_um_example (
     input  wire       rst_n     // reset_n - low to reset
 );
 
-  // All output pins must be assigned. If not used, assign to 0.
-  assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
-  assign uio_out = 0;
+  reg [7:0] count;
+  wire load;
+  wire [7:0] data_in;  
+
+  assign load = ui_in[0];
+  assign data_in = uio_in;
+  assign uo_out  = count;
+  assign uio_out = count;
   assign uio_oe  = 0;
 
+  always @ (posedge clk or negedge rst_n) begin
+    if(rst_n == 0)
+      count <= 0;
+    else if (load == 1)
+      count <= data_in;
+    else
+      count <= count + 1;
+  end
+
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, clk, rst_n, 1'b0};
+  wire _unused = &{ena, ui_in[7:1], 1'b0};
 
 endmodule
