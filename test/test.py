@@ -145,20 +145,20 @@ async def test_reset_overrides_load(dut):
         assert dut.uo_out.value == 0
 
 
-# @cocotb.test()
-# async def test_tristate_outputs(dut):
-#     # OE high drives the count onto the uio pins, OE low makes them high-Z.
-#     await start_and_reset(dut)
+@cocotb.test()
+async def test_tristate_outputs(dut):
+    # OE high drives the count onto the uio pins, OE low makes them high-Z.
+    await start_and_reset(dut)
 
-#     expected = 0
-#     for oe in (1, 0, 1, 0, 1):
-#         set_controls(dut, oe=oe)
-#         for i in range(3):
-#             await FallingEdge(dut.clk)
-#             expected += 1
-#             assert dut.uo_out.value == expected
-#             if oe:
-#                 assert dut.uio_oe.value == ALL_OUTPUTS, "OE high: every uio pin should drive"
-#                 assert dut.uio_out.value == expected
-#             else:
-#                 assert dut.uio_oe.value == ALL_HIGH_Z, "OE low: every uio pin should be high-Z"
+    expected = 0
+    for oe in (1, 0, 1, 0, 1):
+        set_controls(dut, oe=oe)
+        for i in range(3):
+            await FallingEdge(dut.clk)
+            expected += 1
+            assert dut.uo_out.value == expected
+            if oe:
+                assert dut.uio_oe.value == ALL_OUTPUTS, "OE high: every uio pin should drive"
+                assert dut.uio_out.value == expected
+            else:
+                assert dut.uio_oe.value == ALL_HIGH_Z, "OE low: every uio pin should be high-Z"
