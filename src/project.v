@@ -17,13 +17,17 @@ module tt_um_mohilkadakia_counter (
 );
 
   reg [7:0] count;
+  reg [7:0] uio_set;
   wire load;
+  wire oe;
   wire [7:0] data_in;  
 
   assign load = ui_in[0];
+  assign oe = ui_in[1];
   assign data_in = uio_in;
   assign uo_out  = count;
-  assign uio_oe  = 0;
+  assign uio_out = count;
+  assign uio_oe  = uio_set;
 
   always @ (posedge clk or negedge rst_n) begin
     if(rst_n == 0)
@@ -32,9 +36,17 @@ module tt_um_mohilkadakia_counter (
       count <= data_in;
     else
       count <= count + 1;
+
+  end
+
+  always @(*) begin
+    if(oe == 1)
+      uio_set = 8'b11111111;
+    else
+      uio_set = 0;
   end
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, ui_in[7:1], uio_out[7:0], 1'b0};
+  wire _unused = &{ena, ui_in[7:2], 1'b0};
 
 endmodule
