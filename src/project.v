@@ -23,7 +23,6 @@ module tt_um_mohilkadakia_counter (
   assign load = ui_in[0];
   assign data_in = uio_in;
   assign uo_out  = count;
-  assign uio_out = count;
   assign uio_oe  = 0;
 
   always @ (posedge clk or negedge rst_n) begin
@@ -36,6 +35,6 @@ module tt_um_mohilkadakia_counter (
   end
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, ui_in[7:1], 1'b0};
+  wire _unused = &{ena, ui_in[7:1], uio_out[7:0], 1'b0};
 
 endmodule
